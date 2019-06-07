@@ -10,6 +10,8 @@ credentials.py
 author_names.csv
 master_contest.py
 master.py
+competition_rt_follow_other.py
+trump_tweets.py
 
 # C extensions
 *.so
