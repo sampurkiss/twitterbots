@@ -9,7 +9,7 @@ import lxml.html
 from lxml.cssselect import CSSSelector
 from requests import get
 import pandas as pd
-
+import re
 
 from twitter_quotes.credentials import consumer_key, consumer_secret, access_token, access_token_secret
 import tweepy
@@ -45,9 +45,14 @@ def get_link(author_list):
         author = str(author_list).strip().title()
     #find number of spaces
     no_of_spaces = author.count(" ")
+    
     #Takes author names and makes it ready to be appended to generic link
     author_fixed = author.lower().replace(" ","_", no_of_spaces)
+    
     #If author name has a period (eg. an initial), remove period
+    #However if there is a period before another letter eg. J.K. Rowling
+    #I need to replace the first period with an underscore
+    author_fixed = re.sub('(\.)(?=[a-zA-Z])','_',author_fixed)
     no_of_periods = author.count(".")
     if no_of_periods > 0:
         author_fixed = author_fixed.replace(".", "", no_of_periods)
@@ -55,9 +60,6 @@ def get_link(author_list):
     author_link = generic_link + author_fixed    
     return author_link, author
 
-
-
-    
 
 def get_quote(url, author_name):
     """ logic is from here: https://lxml.de/cssselect.html
